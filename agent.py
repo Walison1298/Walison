@@ -2,6 +2,7 @@ from langchain.agents import initialize_agent, AgentType
 from langchain.memory import ConversationBufferMemory
 from langchain_google_genai import ChatGoogleGenerativeAI
 
+# Importa todas as ferramentas do módulo EDA
 from eda_tools import (
     carregar_csv,
     estatisticas_descritivas,
@@ -15,6 +16,7 @@ from eda_tools import (
     detectar_outliers,
 )
 
+# Lista de ferramentas disponíveis
 tools = [
     carregar_csv,
     estatisticas_descritivas,
@@ -28,13 +30,16 @@ tools = [
     detectar_outliers,
 ]
 
+# Inicializa o modelo Gemini (compatível)
 llm = ChatGoogleGenerativeAI(
     model="gemini-pro",
     temperature=0.2
 )
 
+# Memória da conversa
 memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
+# Cria o agente
 agente = initialize_agent(
     tools=tools,
     llm=llm,
@@ -43,8 +48,13 @@ agente = initialize_agent(
     verbose=False
 )
 
+# Função principal de execução
 def executar_agente(prompt: str) -> str:
+    """
+    Executa o agente com base no comando do usuário.
+    """
     try:
-        return agente.run(prompt)
+        resposta = agente.run(prompt)
+        return resposta
     except Exception as e:
         return f"❌ Erro ao executar o agente: {e}"
